@@ -1,17 +1,17 @@
 pipeline {
     agent {
-    label ('docker')
+    label ('eksdeploy')
     }
     environment {
         dockerImage = ''
-        imagename = "<image_name>"
+        imagename = "uc5-eks"
         registryCredential = 'dockerhub'
     }
     
     stages {
-        stage('scm') {
+        stage('github') {
             steps {
-               git '<SCM>'
+               git 'https://github.com/akshugithub/UC5-Deploy-to-AWS-EKS-Cluster.git'
             }
         }
 		stage('build') {
@@ -31,8 +31,8 @@ pipeline {
         }
         stage('Kubernetes_deployment') {
           steps {
-               sh 'kubectl apply -f Kubernetes_Deployment.yaml'
-               sh 'kubectl apply -f Kubernetes_Service.yaml'
+               sh 'kubectl apply -f k8s-deployment.yaml'
+               sh 'kubectl apply -f k8s-service.yaml'
             }
         }
     }
